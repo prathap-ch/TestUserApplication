@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ import com.in.user.Users;
 @ComponentScan("com.in.service")*/
 public class UserController {
 	
+	 private static final Logger log = Logger.getLogger(UserController.class);
 	 @Autowired
 	 UsersService userService;
 	
@@ -33,7 +35,7 @@ public class UserController {
 
 	@RequestMapping(value = "/page", method = RequestMethod.GET)
 	public ModelAndView getPage() {
-		System.out.println("INSIDE users/page REQUEST");
+		log.info("INSIDE users/page REQUEST");
 		ModelAndView view = new ModelAndView("users");
 		return view;
 	}
@@ -41,13 +43,12 @@ public class UserController {
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
     public @ResponseBody Map<String, Object> getAll(Users users) {
         Map<String, Object> map = new HashMap<String, Object>();
-        	System.out.println("user list :");
         List<Users> list = userService.list();
         if (list != null) {
             map.put("status", "200");
             map.put("message", "Data found");
             map.put("data", list);
-            System.out.println("data  ::: "+list.get(0).getEmail());
+            log.info("data  ::: "+list.get(0).getEmail());
         } else {
             map.put("status", "404");
             map.put("message", "Data not found");
